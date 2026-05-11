@@ -1,0 +1,211 @@
+-- ===============================
+-- DATABASE
+-- ===============================
+CREATE DATABASE sql_course;
+
+-- ===============================
+-- TABLE CREATION
+-- ===============================
+
+-- CUSTOMERS
+CREATE TABLE public.olist_customers_dataset (
+    customer_id VARCHAR(255) PRIMARY KEY,
+    customer_unique_id VARCHAR(255),
+    customer_zip_code_prefix VARCHAR(50),
+    customer_city TEXT,
+    customer_state TEXT
+);
+
+-- GEOLOCATION (NO PRIMARY KEY)
+CREATE TABLE public.olist_geolocation_dataset (
+    geolocation_zip_code_prefix VARCHAR(50),
+    geolocation_lat DECIMAL,
+    geolocation_lng DECIMAL,
+    geolocation_city TEXT,
+    geolocation_state TEXT
+);
+
+-- ORDERS
+CREATE TABLE public.olist_orders_dataset (
+    order_id VARCHAR(255) PRIMARY KEY,
+    customer_id VARCHAR(255),
+    order_status VARCHAR(50),
+    order_purchase_timestamp TIMESTAMP,
+    order_approved_at TIMESTAMP,
+    order_delivered_carrier_date TIMESTAMP,
+    order_delivered_customer_date TIMESTAMP,
+    order_estimated_delivery_date TIMESTAMP
+);
+
+-- ORDER ITEMS (COMPOSITE PK)
+CREATE TABLE public.olist_order_items_dataset (
+    order_id VARCHAR(255),
+    order_item_id INT,
+    product_id VARCHAR(255),
+    seller_id VARCHAR(255),
+    shipping_limit_date TIMESTAMP,
+    price DECIMAL,
+    freight_value DECIMAL,
+    PRIMARY KEY (order_id, order_item_id)
+);
+
+-- ORDER PAYMENTS (COMPOSITE PK)
+CREATE TABLE public.olist_order_payments_dataset (
+    order_id VARCHAR(255),
+    payment_sequential INT,
+    payment_type VARCHAR(50),
+    payment_installments INT,
+    payment_value DECIMAL,
+    PRIMARY KEY (order_id, payment_sequential)
+);
+
+-- ORDER REVIEWS
+CREATE TABLE public.olist_order_reviews_dataset (
+    review_id VARCHAR(255) PRIMARY KEY,
+    order_id VARCHAR(255),
+    review_score INT,
+    review_comment_title TEXT,
+    review_comment_message TEXT,
+    review_creation_date TIMESTAMP,
+    review_answer_timestamp TIMESTAMP
+);
+
+-- PRODUCTS
+CREATE TABLE public.olist_products_dataset (
+    product_id VARCHAR(255) PRIMARY KEY,
+    product_category_name VARCHAR(50),
+    product_name_length INT,
+    product_description_length INT,
+    product_photos_qty INT,
+    product_weight_g INT,
+    product_length_cm INT,
+    product_height_cm INT,
+    product_width_cm INT
+);
+
+-- SELLERS
+CREATE TABLE public.olist_sellers_dataset (
+    seller_id VARCHAR(255) PRIMARY KEY,
+    seller_zip_code_prefix VARCHAR(50),
+    seller_city TEXT,
+    seller_state TEXT
+);
+
+-- CATEGORY TRANSLATION
+CREATE TABLE public.product_category_name_translation (
+    product_category_name VARCHAR(50) PRIMARY KEY,
+    product_category_name_english VARCHAR(50)
+);
+
+-- ===============================
+-- FOREIGN KEYS
+-- ===============================
+
+-- Orders → Customers
+ALTER TABLE public.olist_orders_dataset
+ADD CONSTRAINT fk_orders_customer
+FOREIGN KEY (customer_id)
+REFERENCES public.olist_customers_dataset(customer_id);
+
+-- Order Items → Orders
+ALTER TABLE public.olist_order_items_dataset
+ADD CONSTRAINT fk_items_orders
+FOREIGN KEY (order_id)
+REFERENCES public.olist_orders_dataset(order_id);
+
+-- Order Items → Products
+ALTER TABLE public.olist_order_items_dataset
+ADD CONSTRAINT fk_items_products
+FOREIGN KEY (product_id)
+REFERENCES public.olist_products_dataset(product_id);
+
+-- Order Items → Sellers
+ALTER TABLE public.olist_order_items_dataset
+ADD CONSTRAINT fk_items_sellers
+FOREIGN KEY (seller_id)
+REFERENCES public.olist_sellers_dataset(seller_id);
+
+-- Payments → Orders
+ALTER TABLE public.olist_order_payments_dataset
+ADD CONSTRAINT fk_payments_orders
+FOREIGN KEY (order_id)
+REFERENCES public.olist_orders_dataset(order_id);
+
+-- Reviews → Orders
+ALTER TABLE public.olist_order_reviews_dataset
+ADD CONSTRAINT fk_reviews_orders
+FOREIGN KEY (order_id)
+REFERENCES public.olist_orders_dataset(order_id);
+
+-- Products → Category Translation
+ALTER TABLE public.olist_products_dataset
+ADD CONSTRAINT fk_products_category
+FOREIGN KEY (product_category_name)
+REFERENCES public.product_category_name_translation(product_category_name);
+
+-- ===============================
+-- INDEXES (PERFORMANCE BOOST 🚀)
+-- ===============================
+-- Create indexes on foreign key columns for better performance
+
+CREATE INDEX idx_orders_customer_id 
+ON public.olist_orders_dataset(customer_id);
+
+CREATE INDEX idx_items_order_id 
+ON public.olist_order_items_dataset(order_id);
+
+CREATE INDEX idx_items_product_id 
+ON public.olist_order_items_dataset(product_id);
+
+CREATE INDEX idx_items_seller_id 
+ON public.olist_order_items_dataset(seller_id);
+
+CREATE INDEX idx_payments_order_id 
+ON public.olist_order_payments_dataset(order_id);
+
+CREATE INDEX idx_reviews_order_id 
+ON public.olist_order_reviews_dataset(order_id);
+
+CREATE INDEX idx_products_category 
+ON public.olist_products_dataset(product_category_name);
+
+-- ===============================
+-- DATA LOADING (IMPORTANT ⚠️)
+-- ===============================
+-- Use \COPY if running from psql (recommended)
+
+\COPY public.olist_customers_dataset
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\olist_customers_dataset.csv'
+WITH (FORMAT csv, HEADER true);
+
+\COPY public.olist_geolocation_dataset
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\olist_geolocation_dataset.csv'
+WITH (FORMAT csv, HEADER true);
+
+\COPY public.olist_orders_dataset
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\olist_orders_dataset.csv'
+WITH (FORMAT csv, HEADER true);
+
+\COPY public.olist_order_items_dataset
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\olist_order_items_dataset.csv'
+WITH (FORMAT csv, HEADER true);
+
+\COPY public.olist_order_payments_dataset
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\olist_order_payments_dataset.csv'
+WITH (FORMAT csv, HEADER true);
+
+\COPY public.olist_order_reviews_dataset
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\olist_order_reviews_dataset.csv'
+WITH (FORMAT csv, HEADER true);
+
+\COPY public.olist_products_dataset
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\olist_products_dataset.csv'
+WITH (FORMAT csv, HEADER true);
+
+\COPY public.olist_sellers_dataset
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\olist_sellers_dataset.csv'
+WITH (FORMAT csv, HEADER true);
+
+\COPY public.product_category_name_translation
+FROM 'C:\Users\User\that_new_folder\SQL_Projects\Dataset\product_category_name_translation.csv'
+WITH (FORMAT csv, HEADER true);
