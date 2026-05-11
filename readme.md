@@ -149,9 +149,9 @@ Credit cards dominate customer payment preferences, while installment payments (
 
 # Connect With Me
 
-[LinkedIn](https://www.linkedin.com/in/japhetolusegunabiola](https://www.linkedin.com/posts/japhetolusegunabiola_brazilian-e-commerce-analysis-report-ugcPost-7459641981330219008-e5vZ?utm_source=share&utm_medium=member_desktop&rcm=ACoAAESiRCwBdc36vv08BttgMeA1FtzV6t37UOA))
-Email: olusegunjapheth@gmail.com  
-[X / Twitter]([https://x.com/Jaeff_thephaj](https://x.com/Jaeff_thephaj/status/2053874419458560262?s=20))
+- [LinkedIn](https://www.linkedin.com/posts/japhetolusegunabiola_brazilian-e-commerce-analysis-report-ugcPost-7459641981330219008-e5vZ?utm_source=share&utm_medium=member_desktop&rcm=ACoAAESiRCwBdc36vv08BttgMeA1FtzV6t37UOA)
+- Email: olusegunjapheth@gmail.com  
+- [X / Twitter]([https://x.com/Jaeff_thephaj](https://x.com/Jaeff_thephaj/status/2053874419458560262?s=20))
 
 ---
 All criticis will be HIGHLY APPRECIATED
